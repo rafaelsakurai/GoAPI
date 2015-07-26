@@ -1,0 +1,8 @@
+# Directories #
+target/
+
+# OS Files #
+.DS_Store
+
+# NetBeans specific #
+nb-configuration.xml
