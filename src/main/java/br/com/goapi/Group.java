@@ -46,6 +46,10 @@ public class Group {
     public Player getPlayer() {
         return player;
     }
+    
+    public int size() {
+        return moves.size();
+    }
 
     @Override
     public String toString() {

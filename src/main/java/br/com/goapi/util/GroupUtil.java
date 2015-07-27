@@ -3,6 +3,7 @@ package br.com.goapi.util;
 import br.com.goapi.Board;
 import br.com.goapi.Group;
 import br.com.goapi.Move;
+import br.com.goapi.Player;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,43 @@ public class GroupUtil {
         addGroupInformation(groups, board);
         
         return groups;
+    }
+    
+    /**
+     * With base in a board, get all groups of stones from a player.
+     * 
+     * @param board
+     * @param player
+     * @return 
+     */
+    public static List<Group> getGroupsByPlayer(final Board board, final Player player) {
+        List<Group> groups = new ArrayList();
+        
+        for (Move[] moves : board.getBoard()) {
+            for (Move m : moves) {
+                if(!m.isFree() && m.samePlayer(player))
+                    getGroup(groups, board, m).addMove(m);
+            }
+        }
+        
+        addGroupInformation(groups, board);
+        
+        return groups;
+    }
+    
+    public static Group getGroupByPosition(final Board board, final int line, final int column) {
+        Group group = null;
+        Move move = board.getMove(line, column);
+        List<Group> groups = getGroups(board);
+        
+        for (Group g : groups) {
+            if (groupHasMove(g, move)) {
+                group = g;
+                break;
+            }
+        }
+        System.out.println(group);
+        return group;
     }
     
     /**
@@ -115,7 +153,7 @@ public class GroupUtil {
     public static void getPlayerGroup(final Move move, final Group group, final Board board, final List<Group> selected, final int line, final int column) {
         if(!move.isFree() && line >= 0 && line < board.getBoard().length && column >= 0 && column < board.getBoard().length) {
             Move m = board.getMove(line, column);
-            if(!m.isFree() && m.getPlayer().equals(move.getPlayer()) && groupHasMove(group, m)){
+            if(!m.isFree() && m.getPlayer().equals(move.getPlayer()) && groupHasMove(group, m) && !selected.contains(group)){
                 selected.add(group);
             }
         }

@@ -137,16 +137,16 @@ public class KifuUtil {
         String export = "(;FF[4]\n" +
                         "GM[1]\n" +
                         "DT[" + df.format(new Date()) + "]\n" +
-                        "PC[Let's Go]\n" + //OGS: http://online-go.com/game/1378977
+                        "PC[Go API]\n" +
                         "PB[" + player1 + "]\n" +
                         "PW[" + player2 + "]\n" +
                         "BR["+ranking1+"]\n" +
                         "WR["+ranking1+"]\n" +
-                        "CP[www.letsgo.com]\n" +
+                        "CP[https://github.com/rafaelsakurai/GoAPI]\n" +
                         "RE[]\n" + //Result: B+22.5
                         "SZ[]\n" + //?
                         "KM[5.5]\n" + //Komi
-                        "RU[japanese]\n";
+                        "RU[japanese]\n"; //TODO
         for (String move : moves) {
             export += ";" + move.charAt(0) + "[" + Character.toLowerCase(move.charAt(2)) + (char) ('a' + (Character.getNumericValue(move.charAt(3)) - 1)) + "]\n";
         }

@@ -1,6 +1,16 @@
 # GoAPI
 This is a Go Game API in Java which aims to provide the main logic of Go (Igo, Weiqi, Baduk) Game and any developer can use with their own visual interface (console/desktop/web).
 
+### Example
+
+```java
+Player b = new Player("Rafael", "30k", 'B');
+Player w = new Player("Sakurai", "30k", 'W');
+Board board = new Board(19, 5.5, "Japanese", b, w, new Date());
+board.move(Move.create(3, 3, b));
+board.move(Move.create(6, 5, w));
+```
+
 ## This project is still at the beginning
 
 The follow features are implemented:
@@ -44,4 +54,6 @@ The follow features will be implemented:
 * KO Rule;
 * Score calculation;
 * Group status (live or dead);
+* Add a structure of binary tree of sgf nodes;
+* Implement GTP or Go Modem Protocol to play with another program or write a go server;
 * ...

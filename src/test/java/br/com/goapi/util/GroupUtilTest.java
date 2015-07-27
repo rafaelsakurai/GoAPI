@@ -44,61 +44,44 @@ public class GroupUtilTest {
      */
     @Test
     public void testFindGroups() {
-        board.move(Move.create(0, 5, b));
-        board.move(Move.create(0, 6, b));
-        board.move(Move.create(1, 3, b));
-        board.move(Move.create(1, 5, b));
-        board.move(Move.create(2, 5, b));
-        board.move(Move.create(2, 8, b));
-        board.move(Move.create(3, 2, b));
-        board.move(Move.create(3, 3, b));
-        board.move(Move.create(3, 4, b));
-        board.move(Move.create(3, 5, b));
-        board.move(Move.create(3, 6, b));
-        board.move(Move.create(4, 1, b));
-        board.move(Move.create(4, 2, b));
-        board.move(Move.create(4, 4, b));
-        board.move(Move.create(5, 0, b));
-        board.move(Move.create(5, 2, b));
-        board.move(Move.create(5, 4, b));
-        board.move(Move.create(5, 6, b));
-        board.move(Move.create(6, 0, b));
-        board.move(Move.create(6, 1, b));
-        board.move(Move.create(6, 6, b));
-        board.move(Move.create(6, 7, b));
-        board.move(Move.create(7, 0, b));
-        board.move(Move.create(7, 3, b));
-        board.move(Move.create(7, 4, b));
-        board.move(Move.create(8, 0, b));
+        board = KifuUtil.loadFile("target/test-classes/1808698-053-rafasakurai-stefanko3200.sgf");
+        assertEquals(8, GroupUtil.getGroups(board).size());
         
-        board.move(Move.create(0, 7, w));
-        board.move(Move.create(1, 6, w));
-        board.move(Move.create(1, 7, w));
-        board.move(Move.create(2, 6, w));
-        board.move(Move.create(2, 7, w));
-        board.move(Move.create(3, 7, w));
-        board.move(Move.create(4, 3, w));
-        board.move(Move.create(4, 5, w));
-        board.move(Move.create(4, 6, w));
-        board.move(Move.create(4, 7, w));
-        board.move(Move.create(5, 3, w));
-        board.move(Move.create(5, 5, w));
-        board.move(Move.create(6, 2, w));
-        board.move(Move.create(6, 3, w));
-        board.move(Move.create(6, 4, w));
-        board.move(Move.create(6, 5, w));
-        board.move(Move.create(7, 1, w));
-        board.move(Move.create(7, 2, w));
-        board.move(Move.create(7, 5, w));
-        board.move(Move.create(7, 6, w));
-        board.move(Move.create(7, 7, w));
-        board.move(Move.create(8, 1, w));
-        board.move(Move.create(8, 3, w));
-        
+        board = KifuUtil.loadFile("target/test-classes/1502011-085-rafasakurai-Theraiser.sgf");
         board.printBoard();
-        List<Group> groups = GroupUtil.getGroups(board);
-        assertEquals(8, groups.size());
-        
-        System.out.println(groups);
+        assertEquals(16, GroupUtil.getGroups(board).size());
+    }
+    
+    /**
+     *  This board have 9 black groups and 7 white groups.
+     * 
+     *     0 1 2 3 4 5 6 7 8
+     *  0 | |w|w|b|b|w|b|b| |
+     *  1 | |w|b|b| |w|b| |b|
+     *  2 |w|w|b| |b|b|b|b|w|
+     *  3 | |w|w|b|w| |b|w|w|
+     *  4 |w| |w|b|b|b|b| |b|
+     *  5 |b|w|w|w|b|b| |b| |
+     *  6 | |b|w|w|w|w|b| |b|
+     *  7 |b|b|w| | |w|b| |b|
+     *  8 | |w| |w|w|b|b|b| |
+     */
+    @Test
+    public void testFindGroups2() {
+        board = KifuUtil.loadFile("target/test-classes/1502011-085-rafasakurai-Theraiser.sgf");
+        assertEquals(16, GroupUtil.getGroups(board).size());
+    }
+    
+    @Test
+    public void testFindGroupsPlayer() {
+        board = KifuUtil.loadFile("target/test-classes/1502011-085-rafasakurai-Theraiser.sgf");
+        assertEquals(9, GroupUtil.getGroupsByPlayer(board, board.getPlayerB()).size());
+        assertEquals(7, GroupUtil.getGroupsByPlayer(board, board.getPlayerW()).size());
+    }
+    
+    @Test
+    public void testFindGroupByPosition() {
+        board = KifuUtil.loadFile("target/test-classes/1502011-085-rafasakurai-Theraiser.sgf");
+        assertEquals(17, GroupUtil.getGroupByPosition(board, 0, 1).size());
     }
 }
