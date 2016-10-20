@@ -5,7 +5,9 @@ import br.com.goapi.Group;
 import br.com.goapi.Move;
 import br.com.goapi.Player;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -44,7 +46,7 @@ public class GroupUtil {
         
         for (Move[] moves : board.getBoard()) {
             for (Move m : moves) {
-                if(!m.isFree() && m.samePlayer(player))
+                if(!m.isFree() && !m.isPass() && m.samePlayer(player))
                     getGroup(groups, board, m).addMove(m);
             }
         }
@@ -56,17 +58,39 @@ public class GroupUtil {
     
     public static Group getGroupByPosition(final Board board, final int line, final int column) {
         Group group = null;
-        Move move = board.getMove(line, column);
-        List<Group> groups = getGroups(board);
-        
-        for (Group g : groups) {
-            if (groupHasMove(g, move)) {
-                group = g;
-                break;
+        if (line != -1 && column != -1) {
+            Move move = board.getMove(line, column);
+            List<Group> groups = getGroups(board);
+
+            for (Group g : groups) {
+                if(!move.isPass() && groupHasMove(g, move)) {
+                    group = g;
+                    break;
+                }
             }
         }
-        System.out.println(group);
         return group;
+    }
+    
+    public static List<Move> getGroupLiberties(final Board board, final int line, final int column) {
+        Set<Move> liberties = new HashSet();
+        
+        Group g = GroupUtil.getGroupByPosition(board, line, column);
+        
+        for (Move m : g.getMoves()) {
+            addFreeMoves(liberties, board.getMove(m.getLine() - 1, m.getColumn()));
+            addFreeMoves(liberties, board.getMove(m.getLine() + 1, m.getColumn()));
+            addFreeMoves(liberties, board.getMove(m.getLine(), m.getColumn() - 1));
+            addFreeMoves(liberties, board.getMove(m.getLine(), m.getColumn() + 1));
+        }
+        
+        return new ArrayList(liberties);
+    }
+    
+    public static void addFreeMoves(final Set<Move> moves, final Move m) {
+        if (m != null && m.isFree()) {
+            moves.add(m);
+        }
     }
     
     /**

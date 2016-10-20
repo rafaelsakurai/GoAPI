@@ -9,6 +9,7 @@ import java.util.Objects;
  * @author rafaelsakurai
  */
 public class Move {
+    private int id;
     private final int line;
     private final int column;
     private final Player player;
@@ -55,8 +56,16 @@ public class Move {
         return new int[]{position.charAt(0) - 'a', position.charAt(1) - 'a'};
     }
     
+    /**
+     * Format: Column + Line
+     * @return 
+     */
     public String getStringPosition() {
-        return String.valueOf((line + 'a')) + String.valueOf(column + 'a');
+        if(line != -1 && column != -1) {
+            return String.valueOf((char) (column + 'a')) + String.valueOf((char)(line + 'a'));
+        } else {
+            return "";
+        }
     }
     
     public boolean samePlayer(final Player player) {
@@ -68,17 +77,17 @@ public class Move {
     }
     
     public boolean isWhiteMove() {
-        return 'w' == player.getColor();
+        return Player.Color.WHITE == player.getColor();
     }
     
     public boolean isBlackMove() {
-        return 'b' == player.getColor();
+        return Player.Color.BLACK == player.getColor();
     }
-
+    
     public List<Move> getRemovedPositions() {
         return removedPositions;
     }
-
+    
     public int getLine() {
         return line;
     }
@@ -101,6 +110,25 @@ public class Move {
 
     public void setOpponents(final int opponents) {
         this.opponents = opponents;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(final int id) {
+        this.id = id;
+    }
+    
+    /**
+     * Return the int value from move:
+     * -1 for black move
+     * 1 for white move
+     * 
+     * @return 
+     */
+    public int getIntMove() {
+        return player.getColor() == Player.Color.BLACK ? -1 : 1;
     }
     
     @Override
@@ -135,6 +163,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return "Move{" + "x=" + line + ", y=" + column + ", player=" + player + ", liberties=" + liberties + ", opponents=" + opponents + ", removedPositions=" + removedPositions + '}';
+        return "Move{id=" + id + ", line=" + line + ", column=" + column + ", player=" + player + ", liberties=" + liberties + ", opponents=" + opponents + ", removedPositions=" + removedPositions + '}';
     }
 }

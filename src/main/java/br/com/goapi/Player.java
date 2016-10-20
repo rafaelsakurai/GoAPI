@@ -9,15 +9,42 @@ import java.util.Objects;
 public class Player {
     private final String name;
     private final String ranking;
-    private final char color;
+    private final Color color;
     private int captured = 0;
     private int territory = 0;
     private double komi = 0;
     
-    public Player(final String name, final String ranking, final char color) {
+    public enum Color {
+        BLACK('B'), WHITE('W');
+        
+        private final char value;
+        
+        private Color(char value) {
+            this.value = value;
+        }
+    
+        public char getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+    }
+    
+    public Player(final String name, final String ranking, final Color color) {
         this.name = name;
         this.ranking = ranking;
         this.color = color;
+    }
+    
+    public static Player black(final String name, final String ranking) {
+        return new Player(name, ranking, Color.BLACK);
+    }
+    
+    public static Player white(final String name, final String ranking) {
+        return new Player(name, ranking, Color.WHITE);
     }
     
     public Player addCaptured(final int points) {
@@ -33,7 +60,7 @@ public class Player {
         this.komi = komi;
     }
 
-    public char getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -66,7 +93,7 @@ public class Player {
         int hash = 7;
         hash = 19 * hash + Objects.hashCode(this.name);
         hash = 19 * hash + Objects.hashCode(this.ranking);
-        hash = 19 * hash + this.color;
+        hash = 19 * hash + this.color.value;
         hash = 19 * hash + this.captured;
         hash = 19 * hash + this.territory;
         hash = 19 * hash + (int) (Double.doubleToLongBits(this.komi) ^ (Double.doubleToLongBits(this.komi) >>> 32));
@@ -105,6 +132,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" + "name=" + name + ", ranking=" + ranking + ", color=" + color + ", captured=" + captured + ", territory=" + territory + ", komi=" + komi + '}';
+        return "Player{" + "name=" + name + ", ranking=" + ranking + ", color=" + color.value + ", captured=" + captured + ", territory=" + territory + ", komi=" + komi + '}';
     }
 }

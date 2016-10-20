@@ -20,10 +20,13 @@ public class BoardTest {
     @Before
     public void initialize() {
         board = new Board(DEFAULT_SIZE);
-        b = new Player("Rafael", "0k", 'B');
-        w = new Player("Sakurai", "0k", 'W');
+        b = new Player("Rafael", "0k", Player.Color.BLACK);
+        w = new Player("Sakurai", "0k", Player.Color.WHITE);
     }
 
+    /**
+     * Test make a valid move in an empty position.
+     */
     @Test
     public void testMove() {
         assertTrue(board.move(Move.create(0, 0, b)) != null);
@@ -33,12 +36,18 @@ public class BoardTest {
         System.out.println(board);
     }
 
-    @Test
+    /**
+     * Test make an invalid move in an occupied position.
+     */
+    @Test(expected = RuntimeException.class)
     public void testPlayOccupiedMoviment() {
         board.move(Move.create(0, 0, b));
-        assertTrue(board.move(Move.create(0, 0, w)) == null);
+        board.move(Move.create(0, 0, w));
     }
 
+    /**
+     * Test capture a stone in the middle of board.
+     */
     @Test
     public void testRemoveDeadStoneMiddleBoard() {
         board.move(Move.create(2, 2, w)); //remove this stone.
@@ -48,11 +57,17 @@ public class BoardTest {
         board.move(Move.create(2, 1, b));
         Move m = Move.create(2, 3, b);
         board.move(m);
+        
+        //Verify if the stone was removed.
         assertEquals(Move.create(2, 2, w), m.getRemovedPositions().get(0));
 
+        //Verify if the position on board is free.
         assertTrue(board.getMove(2, 2).isFree());
     }
 
+    /**
+     * Test capture a stone in the corner of board.
+     */
     @Test
     public void testRemoveDeadStoneCornerBoard() {
         board.move(Move.create(0, 0, w)); //remove this stone.
@@ -65,25 +80,39 @@ public class BoardTest {
         assertTrue(board.getMove(0, 0).isFree());
     }
 
+    
     @Test
     public void testCountLibertiesCorner() {
         Move m = Move.create(0, 0, w);
         board.move(m);
-        assertEquals(2, BoardUtil.countLiberties(board, m));
+        assertEquals(2, BoardUtil.countLiberties(board.getBoard(), m));
+        
+        board.move(Move.create(0, 1, b));
+        assertEquals(1, BoardUtil.countLiberties(board.getBoard(), m));
     }
 
     @Test
     public void testCountLibertiesBorder() {
         Move m = Move.create(1, 0, w);
         board.move(m);
-        assertEquals(3, BoardUtil.countLiberties(board, m));
+        assertEquals(3, BoardUtil.countLiberties(board.getBoard(), m));
+        board.move(Move.create(0, 0, b));
+        assertEquals(2, BoardUtil.countLiberties(board.getBoard(), m));
+        board.move(Move.create(1, 1, b));
+        assertEquals(1, BoardUtil.countLiberties(board.getBoard(), m));
     }
 
     @Test
     public void testCountLibertiesMiddle() {
         Move m = Move.create(1, 1, w);
         board.move(m);
-        assertEquals(4, BoardUtil.countLiberties(board, m));
+        assertEquals(4, BoardUtil.countLiberties(board.getBoard(), m));
+        board.move(Move.create(0, 1, b));
+        assertEquals(3, BoardUtil.countLiberties(board.getBoard(), m));
+        board.move(Move.create(1, 2, b));
+        assertEquals(2, BoardUtil.countLiberties(board.getBoard(), m));
+        board.move(Move.create(2, 1, b));
+        assertEquals(1, BoardUtil.countLiberties(board.getBoard(), m));
     }
 
     @Test
@@ -92,11 +121,11 @@ public class BoardTest {
         board.move(m);
         Move m2 = Move.create(2, 3, w);
         board.move(m2);
-        assertEquals(6, BoardUtil.countLiberties(board, m));
+        assertEquals(6, BoardUtil.countLiberties(board.getBoard(), m));
 
         Move m3 = Move.create(2, 4, w);
         board.move(m3);
-        assertEquals(8, BoardUtil.countLiberties(board, m));
+        assertEquals(8, BoardUtil.countLiberties(board.getBoard(), m));
     }
 
     @Test
@@ -108,7 +137,7 @@ public class BoardTest {
 
         Move m3 = Move.create(2, 4, w);
         board.move(m3);
-        assertEquals(6, BoardUtil.countLiberties(board, m3));
+        assertEquals(6, BoardUtil.countLiberties(board.getBoard(), m3));
     }
 
     @Test

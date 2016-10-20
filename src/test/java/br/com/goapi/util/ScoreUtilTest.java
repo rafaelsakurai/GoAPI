@@ -3,7 +3,6 @@ package br.com.goapi.util;
 import br.com.goapi.Board;
 import br.com.goapi.Move;
 import br.com.goapi.Player;
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
@@ -19,8 +18,8 @@ public class ScoreUtilTest {
         assertNotNull(board);
 //        board.printInfluenceZone();
 //        board.printPlayerInfluenceZone();
-        System.out.println("Points Black: " + ScoreUtil.getPoints(board, 'b'));
-        System.out.println("Points White: " + ScoreUtil.getPoints(board, 'w'));
+        System.out.println("Points Black: " + ScoreUtil.getPoints(board, Player.Color.BLACK));
+        System.out.println("Points White: " + ScoreUtil.getPoints(board, Player.Color.WHITE));
         
         System.out.println("black komi " + board.getPlayerB().getKomi() + " captured: " + board.getPlayerB().getCaptured() + " territory: " + board.getPlayerB().getTerritory());
         System.out.println("white komi " + board.getPlayerW().getKomi() + " captured: " + board.getPlayerW().getCaptured() + " territory: " + board.getPlayerW().getTerritory());
@@ -41,8 +40,8 @@ public class ScoreUtilTest {
         assertNotNull(board);
 //        board.printInfluenceZone();
 //        board.printPlayerInfluenceZone();
-        System.out.println("Points Black: " + ScoreUtil.getPoints(board, 'b'));
-        System.out.println("Points White: " + ScoreUtil.getPoints(board, 'w'));
+        System.out.println("Points Black: " + ScoreUtil.getPoints(board, Player.Color.BLACK));
+        System.out.println("Points White: " + ScoreUtil.getPoints(board, Player.Color.WHITE));
         
         System.out.println("black komi " + board.getPlayerB().getKomi() + " captured: " + board.getPlayerB().getCaptured() + " territory: " + board.getPlayerB().getTerritory());
         System.out.println("white komi " + board.getPlayerW().getKomi() + " captured: " + board.getPlayerW().getCaptured() + " territory: " + board.getPlayerW().getTerritory());
@@ -62,8 +61,8 @@ public class ScoreUtilTest {
         assertNotNull(board);
         ScoreUtil.printInfluenceZone(board);
         ScoreUtil.printPlayerInfluenceZone(board);
-        System.out.println("Points Black: " + ScoreUtil.getPoints(board, 'b'));
-        System.out.println("Points White: " + ScoreUtil.getPoints(board, 'w'));
+        System.out.println("Points Black: " + ScoreUtil.getPoints(board, Player.Color.BLACK));
+        System.out.println("Points White: " + ScoreUtil.getPoints(board, Player.Color.WHITE));
         
         System.out.println("black komi " + board.getPlayerB().getKomi() + " captured: " + board.getPlayerB().getCaptured() + " territory: " + board.getPlayerB().getTerritory());
         System.out.println("white komi " + board.getPlayerW().getKomi() + " captured: " + board.getPlayerW().getCaptured() + " territory: " + board.getPlayerW().getTerritory());
@@ -77,9 +76,9 @@ public class ScoreUtilTest {
 //    @Test
     public void testBoardInfluence() {
         Board board = new Board(19);
-        board.move(Move.create(3, 3, new Player("", "", 'b')));
-        board.move(Move.create(4, 3, new Player("", "", 'b')));
-        board.move(Move.create(4, 7, new Player("", "", 'w')));
+        board.move(Move.create(3, 3, new Player("", "", Player.Color.BLACK)));
+        board.move(Move.create(4, 3, new Player("", "", Player.Color.BLACK)));
+        board.move(Move.create(4, 7, new Player("", "", Player.Color.WHITE)));
         ScoreUtil.printInfluenceZone(board);
         ScoreUtil.printPlayerInfluenceZone(board);
     }

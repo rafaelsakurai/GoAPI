@@ -3,7 +3,6 @@ package br.com.goapi.util;
 import br.com.goapi.Board;
 import br.com.goapi.Move;
 import br.com.goapi.Player;
-import br.com.goapi.util.BoardUtil;
 
 /**
  *
@@ -43,18 +42,18 @@ public class ScoreUtil {
         boolean hasWhite = false;
         
         for(int i = 0; i < map.length; i++) {
-            if (map[i] == 'b') {
+            if (map[i] == Player.Color.BLACK.getValue()) {
                 hasBlack = true;
             }
-            if (map[i] == 'w') {
+            if (map[i] == Player.Color.WHITE.getValue()) {
                 hasWhite = true;
             }
         }
         
         if(hasBlack && !hasWhite) {
-            owner = 'b';
+            owner = Player.Color.BLACK.getValue();
         } else if(!hasBlack && hasWhite) {
-            owner = 'w';
+            owner = Player.Color.WHITE.getValue();
         }
         
         return owner;
@@ -104,11 +103,11 @@ public class ScoreUtil {
                 Move m = board.getMove(i, j);
                 if(m.isFree()) {
                     if (influence[i][j] < 0) {
-                        players[i][j] = 'b';
+                        players[i][j] = Player.Color.BLACK.getValue();
                     }
 
                     if (influence[i][j] > 0) {
-                        players[i][j] = 'w';
+                        players[i][j] = Player.Color.WHITE.getValue();
                     }
                 }
 //                else {
@@ -125,13 +124,13 @@ public class ScoreUtil {
 //                        players[i][j] = 'b';
 //                    }
                     if (m.isWhiteMove() && influence[i][j] > 0) {
-                        players[i][j] = 'w';
+                        players[i][j] = Player.Color.WHITE.getValue();
                     } else if (m.isWhiteMove() && influence[i][j] < 0) {
-                        players[i][j] = 'b';
+                        players[i][j] = Player.Color.BLACK.getValue();
                     } else if(m.isBlackMove() && influence[i][j] > 0) {
-                        players[i][j] = 'w';
+                        players[i][j] = Player.Color.WHITE.getValue();
                     } else if(m.isBlackMove() && influence[i][j] < 0) {
-                        players[i][j] = 'b';
+                        players[i][j] = Player.Color.BLACK.getValue();
                     }
                 }
             }
@@ -147,7 +146,7 @@ public class ScoreUtil {
             for (int j = 0; j < cBoard[i].length; j++) {
                 char m = cBoard[i][j];
                 if(m != ' '){
-                    int value = m == 'w' ? 1 : -1;
+                    int value = m == Player.Color.WHITE.getValue() ? 1 : -1;
 
                     addValue(influence, i, j, 1 * value);
 
@@ -201,7 +200,7 @@ public class ScoreUtil {
             for (int j = 0; j < cBoard[i].length; j++) {
                 char m = cBoard[i][j];
                 if(m != ' '){
-                    int value = m == 'w' ? 1 : -1;
+                    int value = m == Player.Color.WHITE.getValue() ? 1 : -1;
 
                     addValue(influence, i, j, 1 * value);
 
@@ -257,21 +256,21 @@ public class ScoreUtil {
         }
     }
     
-    public static int getPoints(final Board board, final char player) {
+    public static int getPoints(final Board board, final Player.Color player) {
         int points = 0;
-        Player p = 'b' == player ? board.getPlayerB() : board.getPlayerW();
+        Player p = Player.Color.BLACK == player ? board.getPlayerB() : board.getPlayerW();
         char[][] influence = getPlayerInfluenceZone(board);
         board.printBoard(influence);
         for (int i = 0; i < influence.length; i++) {
             for (int j = 0; j < influence[i].length; j++) {
-                if (influence[i][j] == player) {
+                if (influence[i][j] == player.getValue()) {
                     Move m = board.getMove(i, j);
                     if(m.isFree()) {
                         points += 1;
                     }else if(m.getPlayer().getColor() != player) {
 //                        if(!hasLiberties(m)) {
                             points += 1;
-                            System.out.println("player " + player + " - captured: [" + i + "]["+ j + "] == " + m.getPlayer().getColor());
+                            System.out.println("player " + player.getValue() + " - captured: [" + i + "]["+ j + "] == " + m.getPlayer().getColor());
                             p.addCaptured(1);
 //                        }
                     }

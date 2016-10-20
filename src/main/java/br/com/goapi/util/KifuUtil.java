@@ -4,6 +4,7 @@ import br.com.goapi.Board;
 import br.com.goapi.Move;
 import br.com.goapi.Player;
 import java.io.File;
+import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +25,6 @@ public class KifuUtil {
             while (s.hasNextLine()) {
                 String[] partes = s.nextLine().split(";");
                 for (int i = 0; i < partes.length; i++) {
-                    //;Player[column,line]
                     if (partes[i].length() >= 5 && partes[i].substring(1, 5).startsWith("[") && partes[i].substring(0, 5).endsWith("]")) {
                         Player p = "B".equals(partes[i].substring(0, 1)) ? b : w;
                         String position = partes[i].substring(2, 4);
@@ -68,22 +68,22 @@ public class KifuUtil {
                     
                 } 
                 if (line.contains("DT")) {
-                    date = getContentAsDate(line);
+                    date = getContentAsDate(getParam(line, "DT"));
                 } 
                 if (line.contains("PC")) {
                     
                 } 
                 if (line.contains("PB")) {
-                    playerB = getContentAsString(line);
+                    playerB = getContentAsString(getParam(line, "PB"));
                 } 
                 if (line.contains("PW")) {
-                    playerW = getContentAsString(line);
+                    playerW = getContentAsString(getParam(line, "PW"));
                 } 
                 if (line.contains("BR")) {
-                    rankingB = getContentAsString(line);
+                    rankingB = getContentAsString(getParam(line, "BR"));
                 } 
                 if (line.contains("WR")) {
-                    rankingW = getContentAsString(line);
+                    rankingW = getContentAsString(getParam(line, "WR"));
                 } 
                 if (line.contains("CP")) {
                     
@@ -92,13 +92,13 @@ public class KifuUtil {
                     
                 }
                 if (line.contains("SZ")) {
-                    boardSize = getContentAsInt(line);
+                    boardSize = getContentAsInt(getParam(line, "SZ"));
                 }
                 if (line.contains("KM")) {
-                    komi = getContentAsDouble(line);
+                    komi = getContentAsDouble(getParam(line, "KM"));
                 }
                 if (line.contains("RU")) {
-                    rules = getContentAsString(line);
+                    rules = getContentAsString(getParam(line, "RU"));
                 }
                 
 //                if(line.contains(";")) {
@@ -106,11 +106,17 @@ public class KifuUtil {
 //                }
             }
             
-            return new Board(boardSize, komi, rules, new Player(playerB, rankingB, 'b'), new Player(playerW, rankingW, 'w'), date);
+            return new Board(boardSize, komi, rules, new Player(playerB, rankingB, Player.Color.BLACK), new Player(playerW, rankingW, Player.Color.WHITE), date);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    private static String getParam(String line, String param) {
+        int begin = line.indexOf(param);
+        int end = line.indexOf("]", begin) + 1;
+        return line.substring(begin, end);
     }
     
     private static String getContentAsString(final String line) {
