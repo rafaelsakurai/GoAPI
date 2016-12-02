@@ -116,6 +116,22 @@ public class Board {
         return board[line][column];
     }
     
+    public void removeLastMove() {
+        Move m = sequence.get(sequence.size() - 1);
+        
+        board[m.getLine()][m.getColumn()] = Move.free(m.getLine(), m.getColumn());
+        sequence.remove(m); //remove move from sequence of movements.
+        if (!m.isPass() && !m.getRemovedPositions().isEmpty()) {
+            m.getPlayer().addCaptured(-m.getRemovedPositions().size()); //remove player points
+            for (Move move : m.getRemovedPositions()) {
+                board[move.getLine()][move.getColumn()] = move;
+            }
+        }
+        if (lastStates.size() > 0) {
+            lastStates.remove(lastStates.size() - 1);
+        }
+    }
+    
     public void undo() {
         Move m = sequence.get(sequence.size() - 1);
         undo.add(m);
@@ -187,6 +203,10 @@ public class Board {
             }
         }
         return moves;
+    }
+    
+    public List<Move> getSequence() {
+        return sequence;
     }
 
     public double getKomi() {
